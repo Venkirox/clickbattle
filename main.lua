@@ -1,16 +1,15 @@
 -- 147.185.221.20:60573
 
-lume = require "lume"
+Lume = require "lume"
 local socket = require("socket")
 require("server")
 require("client")
-local mode = nil -- 'server' or 'client'
-server = {}
-client = {}
-clients = {}
-serverPort = 60573
-serverip = 'localhost'
-sendRate = 0.01  -- Send mouse position every x milliseconds
+local mode = nil
+Server = {}
+Client = {}
+local serverPort = 60573
+local serverip = 'localhost'
+SendRate = 0.01 
 
 function love.load()
     print("Press 1 to host as server, 2 to connect as client")
@@ -21,15 +20,15 @@ function love.keypressed(key)
         -- Setup server
         love.mouse.setVisible( false )
         mode = "server"
-        server.tcp = socket.bind("*", serverPort)
-        server.tcp:settimeout(0)
+        Server.tcp = socket.bind("*", serverPort)
+        Server.tcp:settimeout(0)
         print("Server started on port " .. serverPort)
     elseif key == "2" and not mode then
         -- Setup client
         love.mouse.setVisible( false )
         mode = "client"
-        client.tcp = socket.connect(serverip, serverPort)
-        client.tcp:settimeout(0)
+        Client.tcp = socket.connect(serverip, serverPort)
+        Client.tcp:settimeout(0)
         print("Connected to server on port " .. serverPort)
         
     end
@@ -38,18 +37,18 @@ end
 
 function love.update(dt)
     if mode == "server" then
-        serverUpdate(dt)
+        ServerUpdate(dt)
     elseif mode == "client" then
-        clientUpdate(dt)
+        ClientUpdate(dt)
     end
 end
 
 
 function love.draw()
     if mode == "server" then
-        serverDraw()
+        ServerDraw()
     elseif mode == "client" then
-        clientDraw()
+        ClientDraw()
     else
         love.graphics.print("Select mode: 1 for server, 2 for client", 10, 10)
     end
