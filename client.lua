@@ -13,12 +13,15 @@ function updateClientState(dt)
     if client.tcp then
         local data, err = client.tcp:receive()
         if data then
-            local receivedServerCursorX, receivedServerCursorY = data:match("([^,]+),([^,]+)")
-            if receivedServerCursorX and receivedServerCursorY then
-				receivedServerCursorX = tonumber(receivedServerCursorX)
-				receivedServerCursorY = tonumber(receivedServerCursorY)
-                serverInfo.cursorX  = receivedServerCursorX
-                serverInfo.cursorY = receivedServerCursorY
+            -- local receivedServerCursorX, receivedServerCursorY = data:match("([^,]+),([^,]+)")
+            local serverCursor = lume.deserialize(data)
+            if serverCursor.x and serverCursor.y then
+			-- 	receivedServerCursorX = tonumber(receivedServerCursorX)
+			-- 	receivedServerCursorY = tonumber(receivedServerCursorY)
+            --     serverInfo.cursorX  = receivedServerCursorX
+            --     serverInfo.cursorY = receivedServerCursorY
+            serverInfo.cursorX = serverCursor.x
+            serverInfo.cursorY = serverCursor.y
 			end
         end
     end

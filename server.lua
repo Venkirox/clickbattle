@@ -7,7 +7,9 @@ end
 
 function broadcastServerState()
 	-- Send server mouse position from server to all clients
-    local msg = tostring(serverCursorX) .. "," .. tostring(serverCursorY)
+    -- local msg = tostring(serverCursorX) .. "," .. tostring(serverCursorY)
+	local serverCursor = {x = serverCursorX, y = serverCursorY}
+	local msg = lume.serialize(serverCursor)
     for _, client in ipairs(clients) do
         client.socket:send(msg .. "\n")
     end
@@ -30,7 +32,7 @@ function serverUpdate(dt)
 		print("New client connected")
 
 		-- Send welcome message to the new client
-		newClient.socket:send("Hello, this is the server!\n")
+		-- newClient.socket:send("Hello, this is the server!\n")
 	end
 
 	-- Handle incoming data from clients
