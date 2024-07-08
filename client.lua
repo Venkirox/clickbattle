@@ -20,7 +20,7 @@ end
 
 local function sendMousePosition()
     local clientCursor = {}
-    clientCursor.X, clientCursor.Y = love.mouse.getPosition()
+    clientCursor.x, clientCursor.y = love.mouse.getPosition()
     local msg = Lume.serialize(clientCursor)
         Client.tcp:send(msg .. "\n")
 end

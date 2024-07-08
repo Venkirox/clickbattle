@@ -24,8 +24,8 @@ function ServerUpdate(dt)
 	end
 
 	for i = #clients, 1, -1 do
-		clientInfo = clients[i]
-		local data, err = clientInfo.socket:receive()
+		client = clients[i]
+		local data, err = client.socket:receive()
         sendTimerServer = sendTimerServer + dt
         if sendTimerServer >= SendRate then
             broadcastServerState()
@@ -33,8 +33,8 @@ function ServerUpdate(dt)
         end
 		if data then
 			local clientCursor = Lume.deserialize(data)
-				clientInfo.clientCursorX = clientCursor.X
-				clientInfo.clientCursorY = clientCursor.Y
+				client.clientCursorX = clientCursor.x
+				client.clientCursorY = clientCursor.y
 		elseif err == "closed" then
 			print("Client " .. i .. " disconnected")
 			table.remove(clients, i)

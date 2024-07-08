@@ -7,6 +7,7 @@ require("client")
 local mode = nil
 Server = {}
 Client = {}
+Circles = {}
 local serverPort = 60573
 local serverip = 'localhost'
 SendRate = 0.01 
@@ -34,12 +35,39 @@ function love.keypressed(key)
     end
 end
 
+function love.mousepressed(x, y, button)
+    if button == 1 then
+        local newCircle = {
+            x = x,
+            y = y,
+            size = 5,
+            stopIncreasing = false}
+        table.insert(Circles, newCircle)
+        print ("Mouse pressed at " .. x .. ", " .. y)
+    end
+end
+
 
 function love.update(dt)
     if mode == "server" then
         ServerUpdate(dt)
     elseif mode == "client" then
         ClientUpdate(dt)
+    end
+    for i = #Circles, 1, -1 do
+        local circle = Circles[i]
+        if not circle.stopIncreasing then
+        circle.size = circle.size + 80*dt
+        print('xpp')
+            if circle.size >= 30 then
+            circle.stopIncreasing = true
+            end
+        else
+            circle.size = circle.size -150*dt 
+            if circle.size < 1 then
+                table.remove(Circles, i)
+            end
+        end
     end
 end
 
@@ -51,6 +79,9 @@ function love.draw()
         ClientDraw()
     else
         love.graphics.print("Select mode: 1 for server, 2 for client", 10, 10)
+    end
+    for _, circle in ipairs(Circles) do
+        love.graphics.circle("fill", circle.x, circle.y, circle.size) -- Draws a filled circle with a radius of 20
     end
 end
 
